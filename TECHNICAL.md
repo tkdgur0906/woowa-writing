@@ -40,7 +40,7 @@ public class MyService {
 }
 ```
 ## 선언적 트랜잭션
-선언적 트랜잭션은 트랜잭션 관리를 코드에서 직접 수행하지 않고, 어노테이션이나 XML을 통해 선언적으로 관리하는 방식을 말합니다.
+선언적 트랜잭션은 트랜잭션 관리를 코드에서 직접 수행하지 않고, 어노테이션이나 XML을 사용해 선언적으로 관리하는 방식을 말합니다.
 
 ### 특징
 코드 간결성: 트랜잭션 관리 로직을 코드에서 직접 처리하지 않기 때문에 비즈니스 로직과 트랜잭션 관리가 분리되어 코드가 더 간결해지고 가독성이 높아집니다.
@@ -94,7 +94,7 @@ public class MyService {
 ---
 
 ## @Transactional 속성
-`@Transactional`은 트랜잭션의 동작 방식을 세밀하게 제어할 수 있는 여러 속성을 제공합니다. 이 속성을 통해 트랜잭션의 전파 수준, 고립 수준, 타임아웃, 읽기 전용 여부 등을 설정할 수 있습니다.
+`@Transactional`은 트랜잭션의 동작 방식을 세밀하게 제어할 수 있는 여러 속성을 제공합니다. 이 속성을 사용해 트랜잭션의 전파 수준, 고립 수준, 타임아웃, 읽기 전용 여부 등을 설정할 수 있습니다.
 
 각 속성의 자세한 설정 방법은 생략하고, 각각의 의미를 간단하게 설명하겠습니다.
 
@@ -181,6 +181,7 @@ AOP를 활용한 `@Transactional`의 작동 방식은 다음 그림처럼 진행
 
 ![Transactional 구조](./image/transactional_structure.png)
 
+
 ### 트랜잭션 처리 로직
 AOP라는 개념이 생소하기 때문에 어렵게 느껴질 수 있지만, 
 선언적 트랜잭션은 명시적 트랜잭션의 코드를 다른 곳으로 이동한 것이라 보면 편합니다. 트랜잭션 처리 로직이 어떻게 수행되는지 살펴보겠습니다.
@@ -200,7 +201,7 @@ protected Object invokeWithinTransaction(Method method, @Nullable Class<?> targe
 ```
 
 #### 2. 트랜잭션 획득
-- 트랜잭션 매니저를 통해 트랜잭션을 시작합니다.
+- 트랜잭션 매니저가 트랜잭션을 시작합니다.
 ```java
 //TransactionAspectSupport.class
 protected TransactionInfo createTransactionIfNecessary(@Nullable PlatformTransactionManager tm,
@@ -314,11 +315,16 @@ public void commit() {
     }
 ```
 
+지금까지 @Transactional의 작동 과정을 다음과 같이 그림으로 나타낼 수 있다.
+
+![Transactional 전체 구조](./image/transactional_whole_structure.png)
+
+
 ## @Transactional 사용 시 주의점
 
 ### 1. public 메서드에만 적용
 
-`@Transactional`은 Spring의 AOP 프록시 방식을 통해 구현되었습니다.
+`@Transactional`은 Spring의 AOP 프록시 방식을 기반으로 구현되었습니다.
 
 스프링에서 해당 방식은 기본적으로 public 메서드에만 트랜잭션을 적용하도록 설정되었습니다.
 
